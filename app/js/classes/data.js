@@ -162,6 +162,14 @@ var data =
 						var xy = lines[i].substr(9, lines[i].length-9).split(',');
 						obj.position = { x: Number(xy[0].trim()), y: Number(xy[1].trim()) }
 					}
+					else if (lines[i].indexOf("size:") > -1) {
+						if (obj == null) obj = {};
+						let size = lines[i].substr(5, lines[i].length - 5).split(",");
+						obj.size = {
+							width: Number(size[0].trim()),
+							height: Number(size[1].trim())
+						};
+					}
 					else if (lines[i].indexOf("colorID:") > -1)
 					{
 						if (obj == null)
@@ -294,6 +302,12 @@ var data =
 				node.y(object.position.y);
 				avgY += object.position.y;
 			}
+			if (object.size != undefined && object.size.width != undefined) {
+				node.width(object.size.width);
+			}
+			if (object.size != undefined && object.size.height != undefined) {
+				node.height(object.size.height);
+			}
 			if (object.colorID != undefined)
 				node.colorID(object.colorID);
 		}
@@ -320,6 +334,7 @@ var data =
 				"tags": nodes[i].tags(), 
 				"body": nodes[i].body(),
 				"position": { "x": nodes[i].x(), "y": nodes[i].y() },
+				"size": { "width": nodes[i].width(), "height": nodes[i].height() },
 				"colorID": nodes[i].colorID()
 			});
 		}
@@ -336,6 +351,12 @@ var data =
 				output += "tags: " + content[i].tags + "\n";
 				output += "colorID: " + content[i].colorID + "\n";
 				output += "position: " + content[i].position.x + "," + content[i].position.y + "\n";
+				output +=
+					"size: " +
+					content[i].size.width +
+					"," +
+					content[i].size.height +
+					"\n";
 				output += "---\n";
 				output += content[i].body;
 				var body = content[i].body
@@ -379,6 +400,12 @@ var data =
 				output += "\t\t<tags>" + content[i].tags + "</tags>\n";
 				output += "\t\t<body>" + content[i].body + "</body>\n";
 				output += '\t\t<position x="' + content[i].position.x + '" y="' + content[i].position.y + '"></position>\n';
+				output +=
+					'\t\t<size width="' +
+					content[i].size.width +
+					'" height="' +
+					content[i].size.height +
+					'"></size>\n';
 				output += '\t\t<colorID>' + content[i].colorID + '</colorID>\n';
 				output += "\t</node>\n";
 			}
